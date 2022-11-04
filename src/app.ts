@@ -1,13 +1,16 @@
 import express from 'express';
 import ProductController from './controllers/product.controller';
+import UserController from './controllers/user.controller';
 
 const app = express();
 const productController = new ProductController();
+const userController = new UserController();
 
 app.use(express.json());
 
 app.post('/products', productController.createProduct);
 app.get('/products', productController.getAll); 
+app.post('/users', userController.createUser);
 
 /* app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;
