@@ -1,4 +1,9 @@
-import { Pool, ResultSetHeader } from 'mysql2/promise';
+import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+
+interface ILogin {
+  email: string,
+  password: string,
+}
 
 class UserModel {
   public connection: Pool;
@@ -7,12 +12,13 @@ class UserModel {
     this.connection = connection;
   }
 
-  /* public async getAll() {
-    const [rows] = await this.connection.execute<ResultSetHeader>(
-      'SELECT * FROM Trybesmith.Products',
+  public async getById(username: string, password: string): Promise<ILogin> {
+    const [[rows]] = await this.connection.execute<ILogin[] & RowDataPacket[]>(
+      'SELECT * FROM Trybesmith.Users WHERE username = ? AND password = ?',
+      [username, password],
     );
     return rows;
-  } */ 
+  }
 
   public async createUser(username: string, classe: string, level: number, password: string) {
     const [{ insertId }] = await this.connection.execute<ResultSetHeader>(

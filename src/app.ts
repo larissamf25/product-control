@@ -14,6 +14,8 @@ app.post('/products', productController.createProduct);
 app.get('/products', productController.getAll); 
 app.post('/users', userController.createUser);
 app.get('/orders', orderController.getAll);
+app.post('/login', userController.login);
+// app.post('/orders', orderController.createOrder);
 
 /* app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;

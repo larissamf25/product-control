@@ -9,17 +9,15 @@ class UserService {
     this.model = new UserModel(connection);
   }
 
-  /* public async getAll() {
-    const products = await this.model.getAll();
-    return products;
-  } */
+  public async login(username: string, password: string) {
+    const theUserExists = await this.model.getById(username, password);
+    if (!theUserExists) return null;
 
-  public login = (username: string, password: string) => {
     const token = jwt.sign({ data: { username, password } }, process.env.JWT_SECRET as string, {
       expiresIn: '1d', algorithm: 'HS256',
     });
     return token;
-  };
+  }
 
   public async createUser(username: string, classe: string, level: number, password: string) {
     await this.model.createUser(username, classe, level, password);
