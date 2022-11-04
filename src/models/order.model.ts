@@ -15,6 +15,14 @@ class OrderModel {
     const [rows] = result;
     return rows;
   }
+
+  public async createOrder(productsIds: number[]) {
+    const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
+      'INSERT INTO Trybesmith.Orders (name, amount) VALUES (?)',
+      [productsIds],
+    );
+    return { id: insertId, productsIds };
+  }
 }
 
 export default OrderModel;
