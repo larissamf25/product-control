@@ -6,7 +6,8 @@ const productController = new ProductController();
 
 app.use(express.json());
 
-app.use('/products', productController.createProduct); 
+app.post('/products', productController.createProduct);
+app.get('/products', productController.getAll); 
 
 /* app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;

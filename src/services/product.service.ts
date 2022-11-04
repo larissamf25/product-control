@@ -8,6 +8,11 @@ class ProductService {
     this.model = new ProductModel(connection);
   }
 
+  public async getAll() {
+    const products = await this.model.getAll();
+    return products;
+  }
+
   public async createProduct(name: string, amount: number) {
     const product = await this.model.createProduct(name, amount);
     return product;
