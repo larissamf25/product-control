@@ -26,12 +26,9 @@ class OrderService {
     const userId = user.id;
 
     const order = await this.model.createOrder(userId);
-    console.log(order);
 
-    const products = await this.productModel.getById(productsIds);
-    console.log(products.length);
-    await Promise.all(products.map((product) => (
-      this.productModel.createProductOrder(product.name, product.amount, order)
+    await Promise.all(productsIds.map((id) => (
+      this.productModel.createProductOrder(id, order)
     )));
     return { userId, productsIds };
   }

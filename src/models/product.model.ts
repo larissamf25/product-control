@@ -1,12 +1,5 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
 
-interface IProduct {
-  id: number,
-  name: string
-  amount: string,
-  orderId: number,
-}
-
 class ProductModel {
   public connection: Pool;
 
@@ -21,19 +14,6 @@ class ProductModel {
     return rows;
   }
 
-  public async getById(productsIds: number[]) {
-    const products = await Promise.all(
-      productsIds.map(async (id) => {
-        const [[row]] = await this.connection.execute<IProduct[] & ResultSetHeader>(
-          'SELECT * FROM Trybesmith.Products WHERE id = ?',
-          [id],
-        );
-        return row;
-      }),
-    );
-    return products;
-  }
-
   public async createProduct(name: string, amount: string) {
     const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
       'INSERT INTO Trybesmith.Products (name, amount) VALUES (?,?)',
@@ -42,10 +22,10 @@ class ProductModel {
     return { id: insertId, name, amount };
   }
 
-  public async createProductOrder(name: string, amount: string, order: number) {
+  public async createProductOrder(id: number, order: number) {
     await this.connection.execute<ResultSetHeader>(
-      'INSERT INTO Trybesmith.Products (name, amount, orderId) VALUES (?,?,?)',
-      [name, amount, order],
+      'UPDATE Trybesmith.Products SET orderId=? WHERE id=?',
+      [order, id],
     );
     return true;
   }
