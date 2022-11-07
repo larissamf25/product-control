@@ -1,7 +1,10 @@
 import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
 interface ILogin {
-  email: string,
+  id: number,
+  username: string,
+  classe: string,
+  level: number,
   password: string,
 }
 
@@ -12,10 +15,10 @@ class UserModel {
     this.connection = connection;
   }
 
-  public async getById(username: string, password: string): Promise<ILogin> {
+  public async getById(username: string): Promise<ILogin> {
     const [[rows]] = await this.connection.execute<ILogin[] & RowDataPacket[]>(
-      'SELECT * FROM Trybesmith.Users WHERE username = ? AND password = ?',
-      [username, password],
+      'SELECT * FROM Trybesmith.Users WHERE username = ?',
+      [username],
     );
     return rows;
   }

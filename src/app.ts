@@ -2,6 +2,7 @@ import express from 'express';
 import ProductController from './controllers/product.controller';
 import UserController from './controllers/user.controller';
 import OrderController from './controllers/order.controller';
+import validateToken from './middlewares/validateToken';
 
 const app = express();
 const productController = new ProductController();
@@ -15,7 +16,7 @@ app.get('/products', productController.getAll);
 app.post('/users', userController.createUser);
 app.get('/orders', orderController.getAll);
 app.post('/login', userController.login);
-app.post('/orders', orderController.createOrder);
+app.post('/orders', validateToken, orderController.createOrder);
 
 /* app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const { name, message, details } = err as any;

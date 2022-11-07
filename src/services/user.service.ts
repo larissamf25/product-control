@@ -10,10 +10,10 @@ class UserService {
   }
 
   public async login(username: string, password: string) {
-    const theUserExists = await this.model.getById(username, password);
-    if (!theUserExists) return null;
+    const theUserExists = await this.model.getById(username);
+    if (!theUserExists || theUserExists.password !== password) return null;
 
-    const token = jwt.sign({ data: { username, password } }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({ username }, process.env.JWT_SECRET as string, {
       expiresIn: '1d', algorithm: 'HS256',
     });
     return token;

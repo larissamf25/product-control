@@ -16,12 +16,12 @@ class OrderModel {
     return rows;
   }
 
-  public async createOrder(productsIds: number[]) {
+  public async createOrder(userId: number) {
     const [{ insertId }] = await this.connection.execute<ResultSetHeader>(
-      'INSERT INTO Trybesmith.Orders (name, amount) VALUES (?)',
-      [productsIds],
+      'INSERT INTO Trybesmith.Orders (userId) VALUES (?)',
+      [userId],
     );
-    return { id: insertId, productsIds };
+    return insertId;
   }
 }
 

@@ -13,7 +13,7 @@ class ProductService {
     return products;
   }
 
-  public async createProduct(name: string, amount: number) {
+  public async createProduct(name: string, amount: string) {
     const product = await this.model.createProduct(name, amount);
     return product;
   }
