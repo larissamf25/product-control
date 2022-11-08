@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import connection from '../models/connection';
 import UserModel from '../models/user.model';
+import { IUser, ILogin } from '../interfaces';
 
 class UserService {
   public model: UserModel;
@@ -9,7 +10,8 @@ class UserService {
     this.model = new UserModel(connection);
   }
 
-  public async login(username: string, password: string) {
+  public async login(user: ILogin) {
+    const { username, password } = user;
     const theUserExists = await this.model.getById(username);
     if (!theUserExists || theUserExists.password !== password) return null;
 
@@ -19,9 +21,10 @@ class UserService {
     return token;
   }
 
-  public async createUser(username: string, classe: string, level: number, password: string) {
-    await this.model.createUser(username, classe, level, password);
-    const token = this.login(username, password);
+  public async createUser(user: IUser) {
+    const { username, classe, level, password } = user;
+    await this.model.createUser({ username, classe, level, password });
+    const token = this.login({ username, password });
     return token;
   }
 }

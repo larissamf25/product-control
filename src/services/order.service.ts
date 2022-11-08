@@ -2,6 +2,7 @@ import connection from '../models/connection';
 import OrderModel from '../models/order.model';
 import UserModel from '../models/user.model';
 import ProductModel from '../models/product.model';
+import { IOrder } from '../interfaces/index';
 
 class OrderService {
   public model: OrderModel;
@@ -21,14 +22,16 @@ class OrderService {
     return orders;
   }
 
-  public async createOrder(productsIds: number[], username: string) {
+  public async createOrder(order: IOrder) {
+    const { productsIds, username } = order;
     const user = await this.userModel.getById(username);
+    if (!user.id) return null;
     const userId = user.id;
 
-    const order = await this.model.createOrder(userId);
+    const newOrder = await this.model.createOrder(userId);
 
     await Promise.all(productsIds.map((id) => (
-      this.productModel.createProductOrder(id, order)
+      this.productModel.createProductOrder(id, newOrder)
     )));
     return { userId, productsIds };
   }
